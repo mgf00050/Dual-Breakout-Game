@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dual Breakout Game</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Audio para el juego -->
+    <audio id="bgMusic" loop>
+        <source src="audio/Breaking-The-Grid-_main-theme_.ogg" type="audio/ogg">
+    </audio>
+    
+    <!-- Audio para el menú -->
+    <audio id="menuMusic" loop>
+        <source src="audio/Echoes-in-Neon-_menu-theme_.ogg" type="audio/ogg">
+    </audio>
+
+    <!-- Pantalla de inicio -->
+    <div id="startScreen" class="start-screen">
+        <h1>DUAL BREAKOUT</h1>
+        <button id="startButton">START GAME</button>
+    </div>
+
+    <!-- Contenedor del juego (oculto inicialmente) -->
+    <div class="gameContainer" style="display:none;">
+        <div id="gameArea1" class="gameArea">
+            <div id="paddle1" class="paddle"></div>
+            <div id="ball1" class="ball"></div>
+            <div id="bricks1" class="bricks"></div>
+            <div id="gameOver1" class="gameOver">GAME OVER<br><span style="font-size: 16px">Press R to restart</span></div>
+            <div id="gameWin1" class="gameWin">VICTORY!<br><span style="font-size: 16px">Press R to restart</span></div>
+            <div id="gameDraw1" class="gameDraw">DRAW!<br><span style="font-size: 16px">Press R to restart</span></div>
+            <div class="instructions">Player 1: A/D Keys</div>
+        </div>
+       
+        <div id="gameArea2" class="gameArea">
+            <div id="paddle2" class="paddle"></div>
+            <div id="ball2" class="ball"></div>
+            <div id="bricks2" class="bricks"></div>
+            <div id="gameOver2" class="gameOver">GAME OVER<br><span style="font-size: 16px">Press R to restart</span></div>
+            <div id="gameWin2" class="gameWin">VICTORY!<br><span style="font-size: 16px">Press R to restart</span></div>
+            <div id="gameDraw2" class="gameDraw">DRAW!<br><span style="font-size: 16px">Press R to restart</span></div>
+            <div class="instructions">Player 2: Arrow Keys</div>
+        </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

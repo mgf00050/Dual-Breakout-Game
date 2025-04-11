@@ -1,0 +1,215 @@
+/* Estilos base */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+/* Elementos de audio ocultos */
+#bgMusic, #menuMusic {
+    display: none;
+}
+
+/* Pantalla de inicio */
+.start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    z-index: 100;
+    animation: pulseBackground 8s infinite alternate;
+}
+
+@keyframes pulseBackground {
+    0% { background-color: rgba(0,0,20,0.95); }
+    50% { background-color: rgba(20,0,0,0.95); }
+    100% { background-color: rgba(0,20,0,0.95); }
+}
+
+.start-screen h1 {
+    font-size: 4em;
+    margin-bottom: 30px;
+    text-shadow: 0 0 15px #0FF, 0 0 30px #F0F;
+    animation: titleGlow 3s infinite alternate;
+}
+
+@keyframes titleGlow {
+    from { text-shadow: 0 0 10px #0FF, 0 0 20px #F0F; }
+    to { text-shadow: 0 0 20px #0FF, 0 0 40px #F0F; }
+}
+
+.start-screen button {
+    padding: 18px 36px;
+    font-size: 1.8em;
+    background: linear-gradient(45deg, #00F, #F00);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 0 15px rgba(255,255,255,0.5);
+}
+
+.start-screen button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(255,255,255,0.8);
+}
+
+/* Contenedor del juego */
+.gameContainer {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.gameArea {
+    position: relative;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#gameArea1 {
+    border-right: 2px solid #333;
+}
+
+#gameArea2 {
+    border-left: 2px solid #333;
+}
+
+/* Elementos del juego */
+.paddle {
+    position: absolute;
+    width: 150px;
+    height: 15px;
+    border-radius: 7px;
+    bottom: 20px;
+    transition: transform 0.1s ease;
+}
+
+#paddle1 {
+    background-color: #00F;
+    left: calc(50% - 75px);
+}
+
+#paddle2 {
+    background-color: #F00;
+    left: calc(50% - 75px);
+}
+
+.ball {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #FFF;
+    transition: transform 0.1s ease;
+    box-shadow: 0 0 10px currentColor;
+}
+
+#ball1 {
+    background-color: #0FF;
+    color: #0FF;
+}
+
+#ball2 {
+    background-color: #FF0;
+    color: #FF0;
+}
+
+.brick {
+    position: absolute;
+    width: 80px;
+    height: 25px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    transform-origin: center center;
+}
+
+.player1-brick {
+    background-color: #00F;
+    border: 1px solid #006;
+}
+
+.player2-brick {
+    background-color: #F00;
+    border: 1px solid #600;
+}
+
+/* Mensajes del juego */
+.gameOver, .gameWin, .gameDraw {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    text-align: center;
+    display: none;
+    z-index: 10;
+}
+
+.gameOver {
+    color: white;
+}
+
+.gameWin {
+    color: #0F0;
+}
+
+.gameDraw {
+    color: #FF0;
+}
+
+.instructions {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: #AAA;
+    text-align: center;
+}
+
+/* Efectos de animación */
+@keyframes brick-spawn {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes ball-bounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.light-impact {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%);
+    transform: translate(-50%, -50%);
+    animation: light-impact-fade 0.3s forwards;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    z-index: 2;
+}
+
+@keyframes light-impact-fade {
+    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+}
