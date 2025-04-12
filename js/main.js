@@ -1,68 +1,46 @@
 import { initGame, gameAreas } from './game.js';
 
-// Elementos de audio
 const bgMusic = document.getElementById('bgMusic');
 const menuMusic = document.getElementById('menuMusic');
 bgMusic.volume = 0.3;
 menuMusic.volume = 0.4;
 
-// Iniciar música del menú
-function startMenuMusic() {
-    menuMusic.loop = true;
-    menuMusic.play().catch(e => {
-        console.log("Autoplay bloqueado, se requerirá interacción");
-    });
-}
-
-// Configurar controles del juego
 function setupControls() {
     const startButton = document.getElementById('startButton');
     const startScreen = document.getElementById('startScreen');
     const gameContainer = document.querySelector('.gameContainer');
 
-    // Botón de inicio
     startButton.addEventListener('click', () => {
-        console.log("Start Game clickeado");
-        
-        // Transición de audio
-        menuMusic.pause();
-        bgMusic.currentTime = 0;
-        bgMusic.loop = true;
-        bgMusic.play().catch(e => console.log("Error al iniciar música:", e));
-        
-        // Mostrar juego y ocultar menú
         startScreen.style.display = 'none';
         gameContainer.style.display = 'flex';
-        
-        // Iniciar juego
         initGame();
     });
 
-    // Controles de teclado
     document.addEventListener('keydown', (e) => {
-        // Reinicio con R cuando el juego está pausado
-        if ((e.key === 'r' || e.key === 'R') && gameAreas[0].gamePaused) {
+        // Reinicio solo cuando el juego ha terminado
+        if ((e.key === 'r' || e.key === 'R') && gameAreas[0].gameEnded) {
             initGame();
+            return;
         }
         
         if (gameAreas[0].gamePaused) return;
         
-        // Controles del jugador 1 (A/D)
+        // Jugador 1 (A/D)
         if (e.key === 'a' || e.key === 'A') {
-            gameAreas[0].moveLeft = true;
-            gameAreas[0].moveRight = false;
+            gameAreas[0].keyState.left = true;
         } else if (e.key === 'd' || e.key === 'D') {
-            gameAreas[0].moveRight = true;
-            gameAreas[0].moveLeft = false;
+            gameAreas[0].keyState.right = true;
         }
-        // Controles del jugador 2 (Flechas)
-        else if (e.key === 'ArrowLeft') {
-            gameAreas[1].moveLeft = true;
-            gameAreas[1].moveRight = false;
+        
+        // Jugador 2 (Flechas)
+        if (e.key === 'ArrowLeft') {
+            gameAreas[1].keyState.left = true;
         } else if (e.key === 'ArrowRight') {
-            gameAreas[1].moveRight = true;
-            gameAreas[1].moveLeft = false;
+            gameAreas[1].keyState.right = true;
         }
+        
+        // Actualizar estado de movimiento
+        updatePaddleMovement();
     });
 
     document.addEventListener('keyup', (e) => {
@@ -70,22 +48,32 @@ function setupControls() {
         
         // Jugador 1
         if (e.key === 'a' || e.key === 'A') {
-            gameAreas[0].moveLeft = false;
+            gameAreas[0].keyState.left = false;
         } else if (e.key === 'd' || e.key === 'D') {
-            gameAreas[0].moveRight = false;
+            gameAreas[0].keyState.right = false;
         }
+        
         // Jugador 2
-        else if (e.key === 'ArrowLeft') {
-            gameAreas[1].moveLeft = false;
+        if (e.key === 'ArrowLeft') {
+            gameAreas[1].keyState.left = false;
         } else if (e.key === 'ArrowRight') {
-            gameAreas[1].moveRight = false;
+            gameAreas[1].keyState.right = false;
         }
+        
+        // Actualizar estado de movimiento
+        updatePaddleMovement();
     });
 }
 
-// Inicialización
+function updatePaddleMovement() {
+    gameAreas.forEach(player => {
+        player.moveLeft = player.keyState.left && !player.keyState.right;
+        player.moveRight = player.keyState.right && !player.keyState.left;
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM cargado, iniciando configuración");
-    startMenuMusic();
+    menuMusic.loop = true;
+    menuMusic.play().catch(e => console.log("Autoplay bloqueado"));
     setupControls();
 });

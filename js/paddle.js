@@ -1,9 +1,12 @@
 import { gameAreas } from './game.js';
 
 export function movePaddles() {
-    if (gameAreas[0].gamePaused) return;
-    
     gameAreas.forEach(player => {
+        if (player.gamePaused || player.gameEnded) {
+            player.paddle.style.transform = 'scaleX(1)';
+            return;
+        }
+        
         if (player.moveLeft && player.paddleX > 0) {
             player.paddleX -= 7;
             player.paddle.style.transform = 'scaleX(0.95)';
@@ -13,6 +16,7 @@ export function movePaddles() {
         } else {
             player.paddle.style.transform = 'scaleX(1)';
         }
+        
         player.paddle.style.left = `${player.paddleX}px`;
     });
 }
