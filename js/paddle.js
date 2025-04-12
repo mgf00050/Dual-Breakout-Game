@@ -1,4 +1,5 @@
 import { gameAreas } from './game.js';
+import { paddleHitEffect } from './effects.js';
 
 export function movePaddles() {
     gameAreas.forEach(player => {
@@ -19,4 +20,8 @@ export function movePaddles() {
         
         player.paddle.style.left = `${player.paddleX}px`;
     });
+}
+
+export function handlePaddleCollision(paddleElement) {
+    paddleHitEffect(paddleElement);
 }

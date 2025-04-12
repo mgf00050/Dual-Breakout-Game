@@ -1,5 +1,5 @@
 import { gameAreas } from './game.js';
-import { createBrickPieces } from './effects.js';
+import { createBrickPieces, createParticles } from './effects.js';
 
 const brickWidth = 80;
 const brickHeight = 25;
@@ -26,7 +26,7 @@ export function createBricks(playerId) {
             
             const activeInitially = row < 3;
             if (activeInitially) {
-                brick.style.animation = 'brick-spawn 0.2s ease-out';
+                brick.style.animation = 'brick-spawn 0.5s ease-out';
             } else {
                 brick.style.display = 'none';
             }
@@ -58,12 +58,21 @@ export function checkBrickCollisions(player) {
             brick.active = false;
             
             createBrickPieces(brick.element, player.area);
+            const color = player.id === 1 ? '#0FF' : '#FF0';
+            createParticles(
+                brickRect.left - player.area.getBoundingClientRect().left + brickRect.width/2,
+                brickRect.top - player.area.getBoundingClientRect().top + brickRect.height/2,
+                color,
+                12,
+                player.area
+            );
+            
             brick.element.style.animation = 'none';
             void brick.element.offsetWidth;
-            brick.element.style.animation = 'brick-crack 0.4s forwards';
+            brick.element.style.animation = 'brickHit 0.3s forwards';
             setTimeout(() => {
                 brick.element.style.display = 'none';
-            }, 400);
+            }, 300);
             
             const overlapLeft = ballRect.right - brickRect.left;
             const overlapRight = brickRect.right - ballRect.left;
@@ -113,6 +122,6 @@ export function addBrickToPlayer(playerId) {
         brick.element.style.display = 'block';
         brick.element.style.animation = 'none';
         void brick.element.offsetWidth;
-        brick.element.style.animation = 'brick-spawn 0.2s ease-out';
+        brick.element.style.animation = 'brickSpawn 0.5s ease-out';
     }
 }
