@@ -4,6 +4,5 @@ import { GameManager } from './gameManager.js';
 document.addEventListener('DOMContentLoaded', () => {
     const gameManager = new GameManager();
     
-    // Make gameManager available globally for debugging
     window.gameManager = gameManager;
 });

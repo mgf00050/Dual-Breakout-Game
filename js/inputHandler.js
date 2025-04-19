@@ -5,49 +5,93 @@ export function setupInputHandlers(gameManager) {
     const gameContainer = document.querySelector('.gameContainer');
     const bgMusic = document.getElementById('bgMusic');
     const menuMusic = document.getElementById('menuMusic');
-    
+   
     let soundEnabled = true;
-
-    // Start game button
-    startButton.addEventListener('click', () => {
+    
+    // Setup DOM event listeners
+    setupButtonListeners();
+    setupKeyboardListeners();
+    initializeMenuMusic();
+    
+    function setupButtonListeners() {
+        // Start game button
+        startButton.addEventListener('click', handleStartButtonClick);
+        
+        // Sound toggle button
+        soundToggle.addEventListener('click', handleSoundToggleClick);
+    }
+    
+    function setupKeyboardListeners() {
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+    }
+    
+    function handleStartButtonClick() {
         startScreen.style.display = 'none';
         gameContainer.style.display = 'flex';
         menuMusic.pause();
         bgMusic.play().catch(e => console.log("Audio blocked:", e));
         gameManager.startGame();
-    });
-
-    // Sound toggle button
-    soundToggle.addEventListener('click', () => {
+    }
+    
+    function handleSoundToggleClick() {
         soundEnabled = !soundEnabled;
         soundToggle.textContent = `SOUND: ${soundEnabled ? 'ON' : 'OFF'}`;
         bgMusic.muted = !soundEnabled;
         menuMusic.muted = !soundEnabled;
-    });
-
-    // Keyboard controls
-    document.addEventListener('keydown', (e) => {
+    }
+    
+    function handleKeyDown(e) {
+        // Game control keys
+        if (handleGameControlKeys(e)) return;
+        
+        if (gameManager.gameState !== 'PLAYING') return;
+        
+        // Player movement keys
+        handlePlayerMovementKeyDown(e);
+    }
+    
+    function handleKeyUp(e) {
+        if (gameManager.gameState !== 'PLAYING') return;
+        
+        handlePlayerMovementKeyUp(e);
+    }
+    
+    function handleGameControlKeys(e) {
         // Reset game
         if ((e.key === 'r' || e.key === 'R') && gameManager.gameState === 'GAME_OVER') {
             gameManager.resetGame();
-            return;
+            return true;
         }
-
+        
         // Pause game
         if (e.key === 'Escape') {
-            if (gameManager.gameState === 'PLAYING') {
-                gameManager.gameState = 'PAUSED';
-                bgMusic.pause();
-            } else if (gameManager.gameState === 'PAUSED') {
-                gameManager.gameState = 'PLAYING';
-                bgMusic.play();
-            }
-            return;
+            togglePauseGame();
+            return true;
         }
-
-        if (gameManager.gameState !== 'PLAYING') return;
         
+        return false;
+    }
+    
+    function togglePauseGame() {
+        if (gameManager.gameState === 'PLAYING') {
+            gameManager.gameState = 'PAUSED';
+            bgMusic.pause();
+        } else if (gameManager.gameState === 'PAUSED') {
+            gameManager.gameState = 'PLAYING';
+            bgMusic.play();
+        }
+    }
+    
+    function handlePlayerMovementKeyDown(e) {
         // Player 1 controls (A/D)
+        handlePlayer1KeyDown(e);
+        
+        // Player 2 controls (Arrow keys)
+        handlePlayer2KeyDown(e);
+    }
+    
+    function handlePlayer1KeyDown(e) {
         if (e.key === 'a' || e.key === 'A') {
             gameManager.players[0].moveLeft = true;
             gameManager.players[0].moveRight = false;
@@ -55,8 +99,9 @@ export function setupInputHandlers(gameManager) {
             gameManager.players[0].moveRight = true;
             gameManager.players[0].moveLeft = false;
         }
-        
-        // Player 2 controls (Arrow keys)
+    }
+    
+    function handlePlayer2KeyDown(e) {
         if (e.key === 'ArrowLeft') {
             gameManager.players[1].moveLeft = true;
             gameManager.players[1].moveRight = false;
@@ -64,27 +109,34 @@ export function setupInputHandlers(gameManager) {
             gameManager.players[1].moveRight = true;
             gameManager.players[1].moveLeft = false;
         }
-    });
-
-    document.addEventListener('keyup', (e) => {
-        if (gameManager.gameState !== 'PLAYING') return;
-        
+    }
+    
+    function handlePlayerMovementKeyUp(e) {
         // Player 1
+        handlePlayer1KeyUp(e);
+        
+        // Player 2
+        handlePlayer2KeyUp(e);
+    }
+    
+    function handlePlayer1KeyUp(e) {
         if (e.key === 'a' || e.key === 'A') {
             gameManager.players[0].moveLeft = false;
         } else if (e.key === 'd' || e.key === 'D') {
             gameManager.players[0].moveRight = false;
         }
-        
-        // Player 2
+    }
+    
+    function handlePlayer2KeyUp(e) {
         if (e.key === 'ArrowLeft') {
             gameManager.players[1].moveLeft = false;
         } else if (e.key === 'ArrowRight') {
             gameManager.players[1].moveRight = false;
         }
-    });
-
-    // Initialize menu music
-    menuMusic.loop = true;
-    menuMusic.play().catch(e => console.log("Autoplay blocked:", e));
+    }
+    
+    function initializeMenuMusic() {
+        menuMusic.loop = true;
+        menuMusic.play().catch(e => console.log("Autoplay blocked:", e));
+    }
 }

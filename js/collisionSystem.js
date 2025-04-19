@@ -114,40 +114,68 @@ export class CollisionSystem {
     }
 
     handleBrickCollision(brick, brickRect) {
+        // Update game state
+        this.updateGameState(brick);
+        
+        // Handle opponent effects
+        this.handleOpponentEffects();
+        
+        // Create visual effects
+        this.createBrickCollisionEffects(brick, brickRect);
+        
+        // Calculate and apply physics
+        this.calculateCollisionPhysics(brickRect);
+    }
+    
+    updateGameState(brick) {
         brick.active = false;
         this.gameArea.score += 10;
         this.gameArea.updateScore();
-        
-        // Añadir ladrillo al oponente
+    }
+    
+    handleOpponentEffects() {
+        // Add brick to opponent
         this.gameArea.opponentArea.addRandomBrick();
         
-        // Aumentar velocidad del oponente basado en el score
+        // Increase opponent speed
         this.gameArea.opponentArea.pendingSpeedIncrease = true;
         this.gameArea.opponentArea.pendingSpeedMultiplier = Math.min(this.gameArea.score / 1000, 2);
+    }
     
-        
-        this.gameArea.effects.createBrickPieces(brick.element);
+    createBrickCollisionEffects(brick, brickRect) {
         const color = this.gameArea.id === 1 ? '#0FF' : '#FF0';
-        this.gameArea.effects.createParticles(
-            brickRect.left - this.gameArea.area.getBoundingClientRect().left + brickRect.width/2,
-            brickRect.top - this.gameArea.area.getBoundingClientRect().top + brickRect.height/2,
-            color,
-            12
-        );
         
+        // Create brick visual effects
+        this.gameArea.effects.createBrickPieces(brick.element);
+        
+        // Create particles
+        const relativeX = brickRect.left - this.gameArea.area.getBoundingClientRect().left + brickRect.width/2;
+        const relativeY = brickRect.top - this.gameArea.area.getBoundingClientRect().top + brickRect.height/2;
+        this.gameArea.effects.createParticles(relativeX, relativeY, color, 12);
+        
+        // Handle brick animation
+        this.animateBrickHit(brick);
+    }
+    
+    animateBrickHit(brick) {
         brick.element.style.animation = 'none';
         void brick.element.offsetWidth;
         brick.element.style.animation = 'brickHit 0.3s forwards';
         setTimeout(() => {
             brick.element.style.display = 'none';
         }, 300);
-        
+    }
+    
+    calculateCollisionPhysics(brickRect) {
         const ballRect = this.gameArea.ball.getBoundingClientRect();
+        
+        // Calculate overlaps
         const overlapLeft = ballRect.right - brickRect.left;
         const overlapRight = brickRect.right - ballRect.left;
         const overlapTop = ballRect.bottom - brickRect.top;
         const overlapBottom = brickRect.bottom - ballRect.top;
         
+        // Determine bounce direction based on smallest overlap
         const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
         
         if (minOverlap === overlapLeft || minOverlap === overlapRight) {
