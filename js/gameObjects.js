@@ -36,6 +36,9 @@ export class GameArea {
         this.score = 0;
         this.updateScore();
         
+        this.moveLeft = false;
+        this.moveRight = false;
+
         this.ballSpeedX = this.id === 1 ? this.baseSpeed : -this.baseSpeed;
         this.ballSpeedY = this.baseSpeed;
         
