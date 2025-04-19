@@ -29,6 +29,9 @@ export class GameArea {
         
         this.collisionSystem = new CollisionSystem(this);
         this.effects = new EffectsManager(this.area);
+
+        this.pendingSpeedIncrease = false;
+        this.pendingSpeedMultiplier = 1;
     }
 
     reset() {

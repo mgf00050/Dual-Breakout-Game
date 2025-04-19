@@ -80,6 +80,12 @@ export class CollisionSystem {
             
             this.triggerBallBounce();
             
+            // Aplicar el aumento de velocidad pendiente si existe
+            if (this.gameArea.pendingSpeedIncrease) {
+                this.gameArea.updateBallSpeed(1 + this.gameArea.pendingSpeedMultiplier);
+                this.gameArea.pendingSpeedIncrease = false;
+            }
+            
             const hitPosition = (ballRect.left + ballRect.width/2) - (paddleRect.left + paddleRect.width/2);
             const normalizedHit = hitPosition / (paddleRect.width/2);
             this.gameArea.ballSpeedX = normalizedHit * 5;
@@ -116,8 +122,9 @@ export class CollisionSystem {
         this.gameArea.opponentArea.addRandomBrick();
         
         // Aumentar velocidad del oponente basado en el score
-        const speedIncrease = Math.min(this.gameArea.score / 1000, 2);
-        this.gameArea.opponentArea.updateBallSpeed(1 + speedIncrease);
+        this.gameArea.opponentArea.pendingSpeedIncrease = true;
+        this.gameArea.opponentArea.pendingSpeedMultiplier = Math.min(this.gameArea.score / 1000, 2);
+    
         
         this.gameArea.effects.createBrickPieces(brick.element);
         const color = this.gameArea.id === 1 ? '#0FF' : '#FF0';
