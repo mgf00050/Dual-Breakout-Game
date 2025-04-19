@@ -7,45 +7,55 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Audio para el juego -->
-    <audio id="bgMusic" loop>
+    <!-- Audio elements with preload -->
+    <audio id="bgMusic" loop preload="auto">
         <source src="audio/Breaking-The-Grid-_main-theme_.ogg" type="audio/ogg">
     </audio>
     
-    <!-- Audio para el menú -->
-    <audio id="menuMusic" loop>
+    <audio id="menuMusic" loop preload="auto">
         <source src="audio/Echoes-in-Neon-_menu-theme_.ogg" type="audio/ogg">
     </audio>
 
-    <!-- Pantalla de inicio -->
+    <!-- Start Screen -->
     <div id="startScreen" class="start-screen">
         <h1>DUAL BREAKOUT</h1>
-        <button id="startButton">START GAME</button>
+        <div class="menu-options">
+            <button id="startButton" class="menu-button">START GAME</button>
+            <button id="soundToggle" class="menu-button">SOUND: ON</button>
+        </div>
     </div>
 
-    <!-- Contenedor del juego (oculto inicialmente) -->
-    <div class="gameContainer" style="display:none;">
+    <!-- Game Container -->
+    <div class="gameContainer">
         <div id="gameArea1" class="gameArea">
             <div id="paddle1" class="paddle"></div>
             <div id="ball1" class="ball"></div>
             <div id="bricks1" class="bricks"></div>
-            <div id="gameOver1" class="gameOver">GAME OVER<br><span style="font-size: 16px">Press R to restart</span></div>
-            <div id="gameWin1" class="gameWin">VICTORY!<br><span style="font-size: 16px">Press R to restart</span></div>
-            <div id="gameDraw1" class="gameDraw">DRAW!<br><span style="font-size: 16px">Press R to restart</span></div>
+            <div id="gameOver1" class="gameOver">GAME OVER<br><span class="restart-hint">Press R to restart</span></div>
+            <div id="gameWin1" class="gameWin">VICTORY!<br><span class="restart-hint">Press R to restart</span></div>
+            <div id="gameDraw1" class="gameDraw">DRAW!<br><span class="restart-hint">Press R to restart</span></div>
             <div class="instructions">Player 1: A/D Keys</div>
+            <div class="score">Score: <span id="score1">0</span></div>
         </div>
        
         <div id="gameArea2" class="gameArea">
             <div id="paddle2" class="paddle"></div>
             <div id="ball2" class="ball"></div>
             <div id="bricks2" class="bricks"></div>
-            <div id="gameOver2" class="gameOver">GAME OVER<br><span style="font-size: 16px">Press R to restart</span></div>
-            <div id="gameWin2" class="gameWin">VICTORY!<br><span style="font-size: 16px">Press R to restart</span></div>
-            <div id="gameDraw2" class="gameDraw">DRAW!<br><span style="font-size: 16px">Press R to restart</span></div>
+            <div id="gameOver2" class="gameOver">GAME OVER<br><span class="restart-hint">Press R to restart</span></div>
+            <div id="gameWin2" class="gameWin">VICTORY!<br><span class="restart-hint">Press R to restart</span></div>
+            <div id="gameDraw2" class="gameDraw">DRAW!<br><span class="restart-hint">Press R to restart</span></div>
             <div class="instructions">Player 2: Arrow Keys</div>
+            <div class="score">Score: <span id="score2">0</span></div>
         </div>
     </div>
 
+    <!-- Load scripts -->
+    <script type="module" src="js/gameManager.js"></script>
+    <script type="module" src="js/gameObjects.js"></script>
+    <script type="module" src="js/collisionSystem.js"></script>
+    <script type="module" src="js/effectsManager.js"></script>
+    <script type="module" src="js/inputHandler.js"></script>
     <script type="module" src="js/main.js"></script>
 </body>
 </html>
