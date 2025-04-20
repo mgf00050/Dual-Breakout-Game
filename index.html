@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dual Breakout Game</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/countdown.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Audio elements with preload -->
@@ -47,6 +49,14 @@
             <div id="gameDraw2" class="gameDraw">DRAW!<br><span class="restart-hint">Press R to restart</span></div>
             <div class="instructions">Player 2: Arrow Keys</div>
             <div class="score">Score: <span id="score2">0</span></div>
+        </div>
+    </div>
+
+    <!-- Countdown Animation -->
+    <div id="countdownAnimation" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 1000;">
+        <div class="animation-container">
+            <div class="square"></div>
+            <div class="counter"></div>
         </div>
     </div>
 
