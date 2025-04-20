@@ -95,7 +95,9 @@ export class CollisionSystem {
 
     checkBrickCollisions() {
         const ballRect = this.gameArea.ball.getBoundingClientRect();
+        const collidedBricks = [];
         
+        // Primero, recopilamos todos los ladrillos con los que hay colisión
         for (let i = 0; i < this.gameArea.bricks.length; i++) {
             const brick = this.gameArea.bricks[i];
             if (!brick.active) continue;
@@ -107,10 +109,92 @@ export class CollisionSystem {
                 ballRect.bottom > brickRect.top &&
                 ballRect.top < brickRect.bottom) {
                 
-                this.handleBrickCollision(brick, brickRect);
-                break;
+                collidedBricks.push({brick, brickRect});
             }
         }
+        
+        // Si no hay colisiones, terminamos
+        if (collidedBricks.length === 0) return;
+        
+        // Procesamos todas las colisiones detectadas
+        let horizontalCollision = false;
+        let verticalCollision = false;
+        
+        for (const {brick, brickRect} of collidedBricks) {
+            // Actualizar el estado del juego para este ladrillo
+            this.updateGameState(brick);
+            
+            // Manejar efectos para el oponente
+            this.handleOpponentEffects();
+            
+            // Crear efectos visuales
+            this.createBrickCollisionEffects(brick, brickRect);
+            
+            // Determinar la dirección de la colisión
+            const collisionDirection = this.determineCollisionDirection(ballRect, brickRect);
+            
+            if (collisionDirection === 'horizontal') {
+                horizontalCollision = true;
+            } else if (collisionDirection === 'vertical') {
+                verticalCollision = true;
+            }
+        }
+        
+        // Aplicamos la física de colisión basada en todas las colisiones detectadas
+        if (horizontalCollision) {
+            this.gameArea.ballSpeedX = -this.gameArea.ballSpeedX * 1.02;
+        }
+        
+        if (verticalCollision) {
+            this.gameArea.ballSpeedY = -this.gameArea.ballSpeedY * 1.02;
+        }
+        
+        // Si no hemos detectado una dirección clara, invertimos ambas por seguridad
+        if (!horizontalCollision && !verticalCollision && collidedBricks.length > 0) {
+            this.gameArea.ballSpeedX = -this.gameArea.ballSpeedX * 1.02;
+            this.gameArea.ballSpeedY = -this.gameArea.ballSpeedY * 1.02;
+        }
+        
+        this.triggerBallBounce();
+    }
+    
+    // Método nuevo para determinar la dirección de la colisión
+    determineCollisionDirection(ballRect, brickRect) {
+        // Calculamos los solapamientos
+        const overlapLeft = ballRect.right - brickRect.left;
+        const overlapRight = brickRect.right - ballRect.left;
+        const overlapTop = ballRect.bottom - brickRect.top;
+        const overlapBottom = brickRect.bottom - ballRect.top;
+        
+        // Determinamos la dirección de rebote basada en el menor solapamiento
+        const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+        
+        if (minOverlap === overlapLeft || minOverlap === overlapRight) {
+            return 'horizontal';
+        } else {
+            return 'vertical';
+        }
+    }
+
+    calculateCollisionPhysics(brickRect) {
+        const ballRect = this.gameArea.ball.getBoundingClientRect();
+        
+        // Calculate overlaps
+        const overlapLeft = ballRect.right - brickRect.left;
+        const overlapRight = brickRect.right - ballRect.left;
+        const overlapTop = ballRect.bottom - brickRect.top;
+        const overlapBottom = brickRect.bottom - ballRect.top;
+        
+        // Determine bounce direction based on smallest overlap
+        const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+        
+        if (minOverlap === overlapLeft || minOverlap === overlapRight) {
+            this.gameArea.ballSpeedX = -this.gameArea.ballSpeedX * 1.02;
+        } else {
+            this.gameArea.ballSpeedY = -this.gameArea.ballSpeedY * 1.02;
+        }
+        
+        this.triggerBallBounce();
     }
 
     handleBrickCollision(brick, brickRect) {
