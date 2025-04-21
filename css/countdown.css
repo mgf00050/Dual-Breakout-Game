@@ -116,7 +116,6 @@
     100% { opacity: 0.25; }
 }
 
-/* Asegurarnos que el contenedor de la animación esté centrado */
 #countdownAnimation {
     display: flex;
     justify-content: center;
