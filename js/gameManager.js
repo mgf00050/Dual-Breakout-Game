@@ -27,52 +27,41 @@ export class GameManager {
         document.querySelector('.gameContainer').style.display = 'none';
     }
     
-    // Método para mostrar la animación de cuenta regresiva
+    // Mostrar la animación de cuenta regresiva
     showCountdownAnimation() {
         return new Promise(resolve => {
-            // Mostramos la animación única en el centro de la pantalla
             const countdownEl = document.getElementById('countdownAnimation');
             
             if (countdownEl) {
                 countdownEl.style.display = 'flex';
                 
-                // Esperamos a que finalice la animación
                 setTimeout(() => {
-                    // Ocultamos la animación
                     countdownEl.style.display = 'none';
                     resolve();
                 }, 3600);
             } else {
-                // Si por alguna razón no existe el elemento, resolvemos la promesa inmediatamente
                 resolve();
             }
         });
     }
     
-    // Prepara visualmente el juego pero no inicia la lógica
+    // Preparar visualmente el juego
     prepareGameVisuals() {
-        // Ocultamos la pantalla de inicio
         document.getElementById('startScreen').style.display = 'none';
         
-        // Mostramos el contenedor del juego
         document.querySelector('.gameContainer').style.display = 'flex';
         
-        // Resetear las áreas de juego para que se vean los bloques iniciales
         this.players.forEach(player => player.reset());
         
-        // Renderizar una vez para mostrar todo en su posición inicial
         this.render();
     }
     
-    // Modificamos el startGame para separar la preparación visual del inicio de la lógica
+    // Iniciar el juego
     async startGame() {
-        // Primero, preparamos visualmente el juego
         this.prepareGameVisuals();
         
-        // Mostramos la animación y esperamos a que termine
         await this.showCountdownAnimation();
         
-        // Una vez terminada la animación, iniciamos la lógica del juego
         this.gameState = 'PLAYING';
         this.startGameLoop();
     }

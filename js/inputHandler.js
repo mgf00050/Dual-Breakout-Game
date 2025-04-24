@@ -8,16 +8,14 @@ export function setupInputHandlers(gameManager) {
    
     let soundEnabled = true;
     
-    // Setup DOM event listeners
+    // Configurar listeners
     setupButtonListeners();
     setupKeyboardListeners();
     initializeMenuMusic();
     
     function setupButtonListeners() {
-        // Start game button
         startButton.addEventListener('click', handleStartButtonClick);
         
-        // Sound toggle button
         soundToggle.addEventListener('click', handleSoundToggleClick);
     }
     
@@ -42,12 +40,10 @@ export function setupInputHandlers(gameManager) {
     }
     
     function handleKeyDown(e) {
-        // Game control keys
         if (handleGameControlKeys(e)) return;
         
         if (gameManager.gameState !== 'PLAYING') return;
         
-        // Player movement keys
         handlePlayerMovementKeyDown(e);
     }
     
@@ -58,13 +54,13 @@ export function setupInputHandlers(gameManager) {
     }
     
     function handleGameControlKeys(e) {
-        // Reset game
+        // Resetear juego
         if ((e.key === 'r' || e.key === 'R') && gameManager.gameState === 'GAME_OVER') {
             gameManager.resetGame();
             return true;
         }
         
-        // Pause game
+        // Pasar juego
         if (e.key === 'Escape') {
             togglePauseGame();
             return true;
@@ -84,10 +80,8 @@ export function setupInputHandlers(gameManager) {
     }
     
     function handlePlayerMovementKeyDown(e) {
-        // Player 1 controls (A/D)
         handlePlayer1KeyDown(e);
         
-        // Player 2 controls (Arrow keys)
         handlePlayer2KeyDown(e);
     }
     
@@ -112,10 +106,8 @@ export function setupInputHandlers(gameManager) {
     }
     
     function handlePlayerMovementKeyUp(e) {
-        // Player 1
         handlePlayer1KeyUp(e);
         
-        // Player 2
         handlePlayer2KeyUp(e);
     }
     

@@ -176,7 +176,6 @@ export class EffectsManager {
 }
 
 export function initEffects(area1, area2) {
-    // Initialize effects for both game areas
     new EffectsManager(area1);
     new EffectsManager(area2);
 }

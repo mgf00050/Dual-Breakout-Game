@@ -1,6 +1,6 @@
 import { GameManager } from './gameManager.js';
 
-// Initialize the game when DOM is loaded
+// Inicializar el juego cuando el DOM está cargado
 document.addEventListener('DOMContentLoaded', () => {
     const gameManager = new GameManager();
     
@@ -10,15 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Configurar el evento para el botón de inicio
     const startButton = document.getElementById('startButton');
     startButton.addEventListener('click', () => {
-        // Iniciamos el juego con la animación de cuenta regresiva
         gameManager.startGame();
     });
     
-    // Configurar el botón de sonido (mantener funcionalidad existente)
+    // Configurar el botón de sonido
     const soundToggle = document.getElementById('soundToggle');
     if (soundToggle) {
         soundToggle.addEventListener('click', () => {
-            // Suponiendo que tienes alguna gestión de sonido
             const bgMusic = document.getElementById('bgMusic');
             const menuMusic = document.getElementById('menuMusic');
             
@@ -38,10 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Iniciar la música del menú automáticamente
         const menuMusic = document.getElementById('menuMusic');
         if (menuMusic) {
-            // Intentamos reproducir la música automáticamente
             menuMusic.play().catch(error => {
                 console.log('Reproducción automática bloqueada:', error);
-                // La mayoría de navegadores necesitan interacción del usuario antes de reproducir audio
             });
         }
     }
